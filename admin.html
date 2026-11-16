@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>MBTI Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,800&family=Noto+Kufi+Arabic:wght@600;800&family=Vazirmatn:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme:light;
+  --bg:#EFEBFF;--ink:#1E1B4B;--muted:#55527F;--tile:#FFFFFF;--line:rgba(30,27,75,.12);
+  --c1:#E5456B;--c2:#0E9F93;--c3:#B9780A;--c4:#5B4AE6;--accent:#5B4AE6;--on-accent:#FFFFFF;
+  --shadow:0 14px 32px -18px rgba(60,40,160,.35);
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;--bg:#15133A;--ink:#F3F0FF;--muted:#B4B0DC;--tile:rgba(255,255,255,.07);--line:rgba(255,255,255,.14);
+    --c1:#FF8A9B;--c2:#4FDCCB;--c3:#FFCB6B;--c4:#A99BFF;--accent:#A99BFF;--on-accent:#15133A;--shadow:0 14px 32px -18px rgba(0,0,0,.6);
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;--bg:#15133A;--ink:#F3F0FF;--muted:#B4B0DC;--tile:rgba(255,255,255,.07);--line:rgba(255,255,255,.14);
+  --c1:#FF8A9B;--c2:#4FDCCB;--c3:#FFCB6B;--c4:#A99BFF;--accent:#A99BFF;--on-accent:#15133A;--shadow:0 14px 32px -18px rgba(0,0,0,.6);
+}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font-family:"Vazirmatn","Noto Kufi Arabic",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+[hidden]{display:none!important}
+.app{min-height:100vh;min-height:100dvh;padding:20px 20px 32px;max-width:44rem;margin:0 auto;display:flex;flex-direction:column}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{display:flex;align-items:center;gap:10px;direction:ltr}
+.brand svg{width:28px;height:28px}
+.brand b{font:800 1.1rem/1 "Bricolage Grotesque",system-ui,sans-serif;letter-spacing:.04em}
+.brand i{font:600 .8rem/1 "Vazirmatn",sans-serif;font-style:normal;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:.35em .8em}
+h1{margin:0;font:800 clamp(1.7rem,6vw,2.4rem)/1.3 "Noto Kufi Arabic","Vazirmatn",sans-serif}
+.btn{display:inline-flex;align-items:center;justify-content:center;padding:.85em 1.5em;border:0;border-radius:999px;cursor:pointer;background:var(--accent);color:var(--on-accent);font:800 1rem/1 "Noto Kufi Arabic","Vazirmatn",sans-serif;box-shadow:var(--shadow)}
+.btn:disabled{opacity:.55;cursor:wait}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line);box-shadow:none;padding:.6em 1.1em;font-size:.9rem}
+.btn:focus-visible,.field input:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+.login{margin:auto;width:100%;max-width:24rem;text-align:center}
+.fields{display:flex;flex-direction:column;gap:14px;margin-top:1.6rem;text-align:start}
+.field{display:flex;flex-direction:column;gap:6px}
+.field span{font:500 .95rem/1.4 "Vazirmatn",sans-serif;color:var(--muted)}
+.field input{width:100%;padding:.95em 1.1em;border-radius:16px;border:2px solid var(--line);background:var(--tile);color:var(--ink);font:500 1rem/1.4 "Vazirmatn",system-ui,sans-serif;text-align:left}
+.field input:focus{outline:none;border-color:var(--accent)}
+.fields .btn{width:100%}
+.msg{margin:0;min-height:1.4em;font:500 .92rem/1.6 "Vazirmatn",sans-serif;color:var(--c1);text-align:center}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:1.4rem 0}
+.stat{background:var(--tile);border:1px solid var(--line);border-radius:20px;padding:14px 12px;box-shadow:var(--shadow)}
+.stat b{display:block;font:800 1.9rem/1.1 "Bricolage Grotesque",system-ui,sans-serif}
+.stat span{font:500 .82rem/1.4 "Vazirmatn",sans-serif;color:var(--muted)}
+.stat:nth-child(1) b{color:var(--c4)}.stat:nth-child(2) b{color:var(--c2)}.stat:nth-child(3) b{color:var(--c3)}
+.search{width:100%;padding:.85em 1.1em;border-radius:16px;border:2px solid var(--line);background:var(--tile);color:var(--ink);font:500 1rem/1.4 "Vazirmatn",sans-serif}
+.search:focus{outline:none;border-color:var(--accent)}
+.list{list-style:none;margin:14px 0 0;padding:0;display:flex;flex-direction:column;gap:8px}
+.row{display:flex;align-items:center;gap:12px;background:var(--tile);border:1px solid var(--line);border-radius:18px;padding:12px 14px}
+.av{flex:none;width:42px;height:42px;border-radius:14px;display:grid;place-items:center;font:800 1.1rem/1 "Bricolage Grotesque","Noto Kufi Arabic",sans-serif;color:var(--on-accent);background:var(--accent)}
+.row:nth-child(4n+1) .av{background:var(--c1)}.row:nth-child(4n+2) .av{background:var(--c2)}.row:nth-child(4n+3) .av{background:var(--c3)}
+:root:not([data-theme="dark"]) .av{color:#fff}
+.who{flex:1;min-width:0}
+.who b{display:block;font:800 1rem/1.5 "Noto Kufi Arabic","Vazirmatn",sans-serif;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.who small{display:block;font:400 .82rem/1.5 "Vazirmatn",sans-serif;color:var(--muted);direction:ltr;text-align:start;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.meta{flex:none;text-align:end;font:500 .78rem/1.6 "Vazirmatn",sans-serif;color:var(--muted)}
+.tag{display:inline-block;padding:.1em .7em;border-radius:999px;font-weight:500;color:var(--c2);border:1px solid var(--c2)}
+.tag.no{color:var(--c3);border-color:var(--c3)}
+.empty{text-align:center;color:var(--muted);padding:2rem 0;font:500 .95rem/1.7 "Vazirmatn",sans-serif}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <div class="brand">
+      <svg viewBox="0 0 40 40" aria-hidden="true"><g fill="none" stroke-width="5" stroke-linecap="round" transform="rotate(-90 20 20)">
+        <circle cx="20" cy="20" r="15" pathLength="100" stroke-dasharray="17 83" stroke="var(--c1)"/>
+        <circle cx="20" cy="20" r="15" pathLength="100" stroke-dasharray="17 83" stroke-dashoffset="-25" stroke="var(--c2)"/>
+        <circle cx="20" cy="20" r="15" pathLength="100" stroke-dasharray="17 83" stroke-dashoffset="-50" stroke="var(--c3)"/>
+        <circle cx="20" cy="20" r="15" pathLength="100" stroke-dasharray="17 83" stroke-dashoffset="-75" stroke="var(--c4)"/></g></svg>
+      <b>MBTI</b><i>Admin</i>
+    </div>
+    <button class="btn ghost" id="logout" type="button" hidden>چوونە دەرەوە</button>
+  </header>
+
+  <main style="flex:1;display:flex;flex-direction:column">
+    <section class="login" id="loginView">
+      <h1>داشبۆردی ئادمین</h1>
+      <form class="fields" id="loginForm" novalidate>
+        <label class="field"><span>ئیمەیڵ</span><input type="email" name="email" autocomplete="email" inputmode="email" required></label>
+        <label class="field"><span>وشەی نهێنی</span><input type="password" name="password" autocomplete="current-password" required></label>
+        <p class="msg" id="loginMsg" role="alert" aria-live="polite"></p>
+        <button class="btn" type="submit">چوونە ژوورەوە</button>
+      </form>
+    </section>
+
+    <section id="dash" hidden style="margin-top:1.6rem">
+      <h1>بەکارهێنەران</h1>
+      <div class="stats">
+        <div class="stat"><b id="sTotal">0</b><span>کۆی گشتی</span></div>
+        <div class="stat"><b id="sWeek">0</b><span>نوێ لە ٧ ڕۆژدا</span></div>
+        <div class="stat"><b id="sOk">0</b><span>پشتڕاستکراوە</span></div>
+      </div>
+      <input class="search" id="q" type="search" placeholder="گەڕان بە ناو یان ئیمەیڵ" aria-label="گەڕان">
+      <ul class="list" id="list"></ul>
+      <p class="empty" id="empty" hidden>هیچ بەکارهێنەرێک نەدۆزرایەوە.</p>
+      <button class="btn ghost" id="refresh" type="button" style="margin:16px auto 0;display:flex">نوێکردنەوە</button>
+    </section>
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script>
+(function(){
+  var db=window.supabase?window.supabase.createClient('https://rmalzfubkyrwubgoiwsq.supabase.co','sb_publishable_wTg5mh7u3nZ-dih6qtMuHQ_YIjB0WAw'):null;
+  var $=function(i){return document.getElementById(i)};
+  var loginView=$('loginView'),dash=$('dash'),logoutBtn=$('logout'),users=[];
+
+  function setView(isDash){
+    loginView.hidden=isDash;dash.hidden=!isDash;logoutBtn.hidden=!isDash;
+  }
+  function render(){
+    var q=$('q').value.trim().toLowerCase(),list=$('list');
+    list.textContent='';
+    var shown=users.filter(function(u){return !q||(u.display_name||'').toLowerCase().indexOf(q)>-1||(u.email||'').toLowerCase().indexOf(q)>-1});
+    shown.forEach(function(u){
+      var li=document.createElement('li');li.className='row';
+      var av=document.createElement('div');av.className='av';av.textContent=((u.display_name||u.email||'?').trim().charAt(0)||'?').toUpperCase();
+      var w=document.createElement('div');w.className='who';
+      var b=document.createElement('b');b.textContent=u.display_name||'بێ ناو';
+      var s=document.createElement('small');s.textContent=u.email||'';
+      w.appendChild(b);w.appendChild(s);
+      var m=document.createElement('div');m.className='meta';
+      var t=document.createElement('span');t.className='tag'+(u.confirmed?'':' no');t.textContent=u.confirmed?'پشتڕاستکراوە':'چاوەڕێ';
+      var d=document.createElement('div');d.textContent=new Date(u.created_at).toLocaleDateString('en-GB');
+      m.appendChild(t);m.appendChild(d);
+      li.appendChild(av);li.appendChild(w);li.appendChild(m);list.appendChild(li);
+    });
+    $('empty').hidden=shown.length>0;
+  }
+  function load(){
+    return db.rpc('admin_list_users').then(function(r){
+      if(r.error)return false;
+      users=r.data||[];
+      var wk=Date.now()-7*864e5;
+      $('sTotal').textContent=users.length;
+      $('sWeek').textContent=users.filter(function(u){return new Date(u.created_at).getTime()>wk}).length;
+      $('sOk').textContent=users.filter(function(u){return u.confirmed}).length;
+      render();setView(true);return true;
+    });
+  }
+  $('q').addEventListener('input',render);
+  $('refresh').addEventListener('click',load);
+  logoutBtn.addEventListener('click',function(){db.auth.signOut().then(function(){users=[];setView(false)})});
+
+  var f=$('loginForm'),msg=$('loginMsg');
+  f.addEventListener('submit',function(e){
+    e.preventDefault();
+    if(!db){msg.textContent='بارکردنی خزمەتگوزاری سەرکەوتوو نەبوو.';return}
+    var email=f.email.value.trim(),pw=f.password.value,btn=f.querySelector('button');
+    if(!email||!pw){msg.textContent='ئیمەیڵ و وشەی نهێنی بنووسە.';return}
+    msg.textContent='';btn.disabled=true;
+    db.auth.signInWithPassword({email:email,password:pw}).then(function(r){
+      if(r.error){btn.disabled=false;msg.textContent='ئیمەیڵ یان وشەی نهێنی هەڵەیە.';return}
+      return load().then(function(ok){
+        btn.disabled=false;
+        if(ok){f.reset();return}
+        db.auth.signOut();msg.textContent='ئەم هەژمارە ئادمین نییە.';
+      });
+    },function(){btn.disabled=false;msg.textContent='پەیوەندی بە ئینتەرنێتەوە نییە.'});
+  });
+
+  if(db)db.auth.getSession().then(function(r){if(r&&r.data&&r.data.session)load()});
+})();
+</script>
+</body>
+</html>
