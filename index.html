@@ -4,11 +4,20 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>MBTI</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#5A32B5">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="MBTI">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cg fill='none' stroke-width='5' stroke-linecap='round' transform='rotate(-90 20 20)'%3E%3Ccircle cx='20' cy='20' r='15' pathLength='100' stroke-dasharray='17 83' stroke='%23FF6F86'/%3E%3Ccircle cx='20' cy='20' r='15' pathLength='100' stroke-dasharray='17 83' stroke-dashoffset='-25' stroke='%2323BFAE'/%3E%3Ccircle cx='20' cy='20' r='15' pathLength='100' stroke-dasharray='17 83' stroke-dashoffset='-50' stroke='%23F5B63F'/%3E%3Ccircle cx='20' cy='20' r='15' pathLength='100' stroke-dasharray='17 83' stroke-dashoffset='-75' stroke='%238B7BFF'/%3E%3C/g%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@1,800&family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Noto+Kufi+Arabic:wght@600;800&family=Vazirmatn:wght@400;500&display=swap" rel="stylesheet">
 <script>document.documentElement.classList.add('js')</script>
+
 <style>
 :root{
   color-scheme:light;
@@ -456,9 +465,27 @@ body.gated{overflow:hidden}
 .ragree input{flex:none;width:22px;height:22px;accent-color:#FF9F43}
 #rules .gall:disabled{opacity:.5;cursor:not-allowed}
 #rules{z-index:120}
+
+/* ===== install sheet ===== */
+.inst{position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:90;max-width:26rem;margin:0 auto;padding:14px;border-radius:24px;
+  background:rgba(30,12,80,.92);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.22);color:#fff;
+  box-shadow:0 24px 50px -16px rgba(10,0,50,.8);animation:instUp .5s cubic-bezier(.2,1,.3,1) both}
+.inst[hidden]{display:none}
+@keyframes instUp{from{transform:translateY(120%);opacity:0}}
+.instx{position:absolute;top:6px;left:8px;width:30px;height:30px;border:0;border-radius:50%;background:rgba(255,255,255,.14);color:#fff;font:400 1.3rem/1 sans-serif;cursor:pointer}
+.insth{display:flex;align-items:center;gap:12px;padding-left:28px}
+.insth img{flex:none;border-radius:12px}
+.insth b{display:block;font:800 .95rem/1.5 "Noto Kufi Arabic","Vazirmatn",sans-serif}
+.insth small{display:block;font:400 .78rem/1.5 "Vazirmatn",sans-serif;color:rgba(255,255,255,.75)}
+.instb{display:flex;gap:8px;margin-top:12px}
+.instb .btn{flex:1;margin:0;justify-content:center;padding:.85em .6em;font-size:.88rem}
+.insth2{margin:.7rem 0 0;padding:10px 12px;border-radius:14px;background:rgba(255,255,255,.1);font:500 .82rem/1.9 "Vazirmatn",sans-serif;color:#FFE9A8;text-align:right}
+.insth2[hidden]{display:none}
+
 </style>
 </head>
 <body>
+
 <div class="app">
   <header class="brand">
     <svg viewBox="0 0 40 40" aria-hidden="true">
@@ -598,13 +625,13 @@ body.gated{overflow:hidden}
             <rect x="0" y="74" width="100" height="30" clip-path="url(#cp-market)" fill="#B6E23B"/></svg>
           <span class="in"><svg class="ic" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:#B6E23B"><path fill="currentColor" fill-opacity=".3" d="M6 5h20l3 7H3z"/><path d="M3 12a3.25 3.25 0 0 0 6.5 0 3.25 3.25 0 0 0 6.5 0 3.25 3.25 0 0 0 6.5 0 3.25 3.25 0 0 0 6.5 0"/><path d="M5.5 15.5V27h21V15.5"/><rect x="13" y="19.5" width="6" height="7.5" rx="1" fill="currentColor" stroke="none"/></svg><b>بازاڕ</b></span>
         </button>
-        <a class="tile" href="admin.html" data-box="edit" style="--l:27%;--t:61.29%;--w:#4DE3A6;--d:0.35s" aria-label="دەستکاری">
+        <button class="tile" type="button" data-box="edit" style="--l:27%;--t:61.29%;--w:#4DE3A6;--d:0.35s" aria-label="دەستکاری">
           <svg class="shape" viewBox="0 0 100 100" aria-hidden="true"><defs><clipPath id="cp-edit"><polygon points="50,9 91,50 50,91 9,50"/></clipPath></defs>
             <polygon points="50,2 98,50 50,98 2,50" class="ring"/>
             <polygon points="50,9 91,50 50,91 9,50" class="face"/>
             <rect x="0" y="74" width="100" height="30" clip-path="url(#cp-edit)" fill="#4DE3A6"/></svg>
           <span class="in"><svg class="ic" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:#4DE3A6"><path fill="currentColor" fill-opacity=".3" d="M6 26l1.2-5L21 7.2a2.4 2.4 0 0 1 3.4 0l.4.4a2.4 2.4 0 0 1 0 3.4L11 24.8z"/><path d="M18.5 9.7l3.8 3.8M15 27.5h12"/><path fill="currentColor" stroke="none" d="M7 4.5l.9 2.2 2.2.9-2.2.9L7 10.7l-.9-2.2-2.2-.9 2.2-.9z"/></svg><b>دەستکاری</b></span>
-        </a>
+        </button>
       </div>
       <p class="soon" id="soon" role="status" aria-live="polite"></p>
       <button class="btn ghost" id="logout" type="button">چوونە دەرەوە</button>
@@ -613,6 +640,19 @@ body.gated{overflow:hidden}
 </div>
 
 
+
+<div class="inst" id="inst" role="dialog" aria-labelledby="instT" hidden>
+  <button type="button" class="instx" id="instX" aria-label="داخستن">×</button>
+  <div class="insth">
+    <img src="icon-192.png" alt="" width="44" height="44">
+    <div><b id="instT">ئەپی MBTI بهێنە سەر مۆبایلەکەت</b><small>بێ ئەوەی بچیتە ناو ڕێکخستنەکانی براوزەر</small></div>
+  </div>
+  <div class="instb">
+    <button type="button" class="btn" id="instGo">دابەزاندنی ئەپ</button>
+    <button type="button" class="btn ghost" id="instShort">هێنانە سەر شاشە</button>
+  </div>
+  <p class="insth2" id="instHelp" hidden></p>
+</div>
 <div class="gate" id="gate" role="dialog" aria-modal="true" aria-labelledby="gateT" hidden>
   <div class="gcard">
     <div class="gbadge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v5.5c0 4.7-3.2 8.3-8 9.5-4.8-1.2-8-4.8-8-9.5V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg></div>
@@ -1099,5 +1139,43 @@ body.gated{overflow:hidden}
   new MutationObserver(function(){if(!acc.hidden)sync()}).observe(who,{childList:true,characterData:true,subtree:true});
 })();
 </script>
+
+<script>
+(function(){
+  if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost')){
+    window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){})});
+  }
+  var box=document.getElementById('inst'),go=document.getElementById('instGo'),sh=document.getElementById('instShort'),
+      help=document.getElementById('instHelp'),x=document.getElementById('instX');
+  var standalone=(window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true;
+  var ua=navigator.userAgent||'',ios=/iphone|ipad|ipod/i.test(ua)||(/Macintosh/.test(ua)&&navigator.maxTouchPoints>1);
+  var dp=null,closed=false;
+  try{closed=sessionStorage.getItem('instClosed')==='1'}catch(e){}
+  if(standalone||closed)return;
+
+  window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();dp=e});
+  window.addEventListener('appinstalled',function(){box.hidden=true;dp=null});
+
+  function steps(kind){
+    help.hidden=false;
+    if(ios)help.innerHTML='لە Safari: دووگمەی <b>هاوبەشکردن</b> (□↑) دابگرە ← <b>Add to Home Screen</b> هەڵبژێرە ← <b>Add</b>.';
+    else if(kind==='install')help.innerHTML='ئەم براوزەرە ڕێگە نادات ڕاستەوخۆ دابەزێنرێت. لە Chrome: <b>⋮</b> ← <b>Install app</b> / <b>دامەزراندنی ئەپ</b>. ئەگەر نەبوو، پەڕەکە لەسەر <b>https</b> بکەرەوە.';
+    else help.innerHTML='لە Chrome: <b>⋮</b> ← <b>Add to Home screen</b> / <b>زیادکردن بۆ شاشەی سەرەکی</b> ← <b>Add</b>.';
+  }
+  go.addEventListener('click',function(){
+    if(dp){
+      dp.prompt();
+      dp.userChoice.then(function(c){dp=null;if(c&&c.outcome==='accepted')box.hidden=true}).catch(function(){});
+    }else steps('install');
+  });
+  sh.addEventListener('click',function(){
+    if(dp){dp.prompt();dp.userChoice.then(function(){dp=null}).catch(function(){})}
+    else steps('short');
+  });
+  x.addEventListener('click',function(){box.hidden=true;try{sessionStorage.setItem('instClosed','1')}catch(e){}});
+  setTimeout(function(){box.hidden=false},1200);
+})();
+</script>
+
 </body>
 </html>
