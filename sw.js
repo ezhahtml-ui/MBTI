@@ -1,6 +1,8 @@
 // MBTI service worker v5: network-first (with timeout) + offline fallback + Web Push
-const CACHE='mbti-v5';   // v5: adds the adaptive engine + question bank to the offline shell
+const CACHE='mbti-v6';   // v6: images moved out of index.html into img/ (cached below)
 const SHELL=['./','./index.html','./manifest.webmanifest','./icon-192.png','./icon-512.png','./apple-touch-icon.png','./adaptive-engine.js','./question-bank.v1.json'];
+const IMGS=["lb1.webp", "lb10.webp", "lb11.webp", "lb2.webp", "lb3.webp", "lb4.webp", "lb5.webp", "lb6.webp", "lb7.webp", "lb8.webp", "lb9.webp", "z0.webp", "z1.webp", "z10.webp", "z11.webp", "z2.webp", "z3.webp", "z4.webp", "z5.webp", "z6.webp", "z7.webp", "z8.webp", "z9.webp", "zi0.webp", "zi1.webp", "zi10.webp", "zi11.webp", "zi2.webp", "zi3.webp", "zi4.webp", "zi5.webp", "zi6.webp", "zi7.webp", "zi8.webp", "zi9.webp"].map(f=>'./img/'+f);
+SHELL.push(...IMGS);
 const CDN='cdn.jsdelivr.net';           // supabase-js + astronomy-engine (cached so the app opens offline)
 const TIMEOUT=4000;
 
