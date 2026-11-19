@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>MBTI Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,800&family=Noto+Kufi+Arabic:wght@600;800&family=Vazirmatn:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme:light;
+  --bg:#EFEBFF;--ink:#1E1B4B;--muted:#55527F;--tile:#FFFFFF;--line:rgba(30,27,75,.12);
+  --c1:#E5456B;--c2:#0E9F93;--c3:#B9780A;--c4:#5B4AE6;--accent:#5B4AE6;--on-accent:#FFFFFF;
+  --shadow:0 14px 32px -18px rgba(60,40,160,.35);
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;--bg:#15133A;--ink:#F3F0FF;--muted:#B4B0DC;--tile:rgba(255,255,255,.07);--line:rgba(255,255,255,.14);
+    --c1:#FF8A9B;--c2:#4FDCCB;--c3:#FFCB6B;--c4:#A99BFF;--accent:#A99BFF;--on-accent:#15133A;--shadow:0 14px 32px -18px rgba(0,0,0,.6);
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;--bg:#15133A;--ink:#F3F0FF;--muted:#B4B0DC;--tile:rgba(255,255,255,.07);--line:rgba(255,255,255,.14);
+  --c1:#FF8A9B;--c2:#4FDCCB;--c3:#FFCB6B;--c4:#A99BFF;--accent:#A99BFF;--on-accent:#15133A;--shadow:0 14px 32px -18px rgba(0,0,0,.6);
+}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font-family:"Vazirmatn","Noto Kufi Arabic",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+[hidden]{display:none!important}
+.app{min-height:100vh;min-height:100dvh;padding:22px clamp(14px,2.2vw,34px) 36px;max-width:1600px;margin:0 auto;display:flex;flex-direction:column}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{display:flex;align-items:center;gap:10px;direction:ltr}
+.brand svg{width:28px;height:28px}
+.brand b{font:800 1.1rem/1 "Bricolage Grotesque",system-ui,sans-serif;letter-spacing:.04em}
+.brand i{font:600 .8rem/1 "Vazirmatn",sans-serif;font-style:normal;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:.35em .8em}
+h1{margin:0;font:800 clamp(1.7rem,6vw,2.4rem)/1.3 "Noto Kufi Arabic","Vazirmatn",sans-serif}
+.btn{display:inline-flex;align-items:center;justify-content:center;padding:.85em 1.5em;border:0;border-radius:999px;cursor:pointer;background:var(--accent);color:var(--on-accent);font:800 1rem/1 "Noto Kufi Arabic","Vazirmatn",sans-serif;box-shadow:var(--shadow)}
+.btn:disabled{opacity:.55;cursor:wait}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line);box-shadow:none;padding:.6em 1.1em;font-size:.9rem}
+.btn:focus-visible,.field input:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+.login{margin:auto;width:100%;max-width:24rem;text-align:center}
+.fields{display:flex;flex-direction:column;gap:14px;margin-top:1.6rem;text-align:start}
+.field{display:flex;flex-direction:column;gap:6px}
+.field span{font:500 .95rem/1.4 "Vazirmatn",sans-serif;color:var(--muted)}
+.field input{width:100%;padding:.95em 1.1em;border-radius:16px;border:2px solid var(--line);background:var(--tile);color:var(--ink);font:500 1rem/1.4 "Vazirmatn",system-ui,sans-serif;text-align:left}
+.field input:focus{outline:none;border-color:var(--accent)}
+.fields .btn{width:100%}
+.msg{margin:0;min-height:1.4em;font:500 .92rem/1.6 "Vazirmatn",sans-serif;color:var(--c1);text-align:center}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:1.4rem 0}
+.stat{background:var(--tile);border:1px solid var(--line);border-radius:20px;padding:14px 12px;box-shadow:var(--shadow)}
+.stat b{display:block;font:800 1.9rem/1.1 "Bricolage Grotesque",system-ui,sans-serif}
+.stat span{font:500 .82rem/1.4 "Vazirmatn",sans-serif;color:var(--muted)}
+.stat:nth-child(1) b{color:var(--c4)}.stat:nth-child(2) b{color:var(--c2)}.stat:nth-child(3) b{color:var(--c3)}
+.search{width:100%;padding:.85em 1.1em;border-radius:16px;border:2px solid var(--line);background:var(--tile);color:var(--ink);font:500 1rem/1.4 "Vazirmatn",sans-serif}
+.search:focus{outline:none;border-color:var(--accent)}
+.list{list-style:none;margin:14px 0 0;padding:0;display:flex;flex-direction:column;gap:8px}
+.row{display:flex;align-items:center;gap:12px;background:var(--tile);border:1px solid var(--line);border-radius:18px;padding:12px 14px}
+.av{flex:none;width:42px;height:42px;border-radius:14px;display:grid;place-items:center;font:800 1.1rem/1 "Bricolage Grotesque","Noto Kufi Arabic",sans-serif;color:var(--on-accent);background:var(--accent)}
+.row:nth-child(4n+1) .av{background:var(--c1)}.row:nth-child(4n+2) .av{background:var(--c2)}.row:nth-child(4n+3) .av{background:var(--c3)}
+:root:not([data-theme="dark"]) .av{color:#fff}
+.who{flex:1;min-width:0}
+.who b{display:block;font:800 1rem/1.5 "Noto Kufi Arabic","Vazirmatn",sans-serif;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.who small{display:block;font:400 .82rem/1.5 "Vazirmatn",sans-serif;color:var(--muted);direction:ltr;text-align:start;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.meta{flex:none;text-align:end;font:500 .78rem/1.6 "Vazirmatn",sans-serif;color:var(--muted)}
+.tag{display:inline-block;padding:.1em .7em;border-radius:999px;font-weight:500;color:var(--c2);border:1px solid var(--c2)}
+.tag.no{color:var(--c3);border-color:var(--c3)}
+.empty{text-align:center;color:var(--muted);padding:2rem 0;font:500 .95rem/1.7 "Vazirmatn",sans-serif}
+
+.an{margin:0 0 2rem}
+.an h2{margin:1.6rem 0 .6rem;font:800 1.25rem/1.4 "Noto Kufi Arabic","Vazirmatn",sans-serif}
+.an .stats{grid-template-columns:repeat(3,1fr);margin:.6rem 0}
+.an details{background:var(--tile);border:1px solid var(--line);border-radius:18px;padding:10px 14px;margin:8px 0}
+.an summary{cursor:pointer;font:800 1rem/1.7 "Noto Kufi Arabic","Vazirmatn",sans-serif}
+.an p,.an li{font:500 .9rem/1.8 "Vazirmatn",sans-serif;color:var(--muted);margin:.3rem 0}
+.an ul{padding-inline-start:1.2rem;margin:.3rem 0}
+.an .scroll{overflow-x:auto}
+.an table{border-collapse:collapse;width:100%;font:500 .85rem/1.6 "Vazirmatn",sans-serif}
+.an th,.an td{padding:.35em .6em;border-bottom:1px solid var(--line);text-align:start;white-space:nowrap}
+.an td.w{white-space:normal;min-width:12em}
+.an .warn{color:var(--c3)}
+.an .ex{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.an bdi{unicode-bidi:isolate}
+
+/* ===== Premium MBTI admin dashboard UI — visual layer only ===== */
+:root{
+  --bg:#F7F6FF;--ink:#211B52;--muted:#77739B;--tile:#FFFFFF;
+  --line:rgba(78,63,157,.10);--accent:#6846E8;--on-accent:#fff;
+  --shadow:0 18px 42px -26px rgba(75,53,166,.28);
+}
+body{background:
+  radial-gradient(70rem 35rem at 100% -12%,rgba(194,174,255,.22),transparent 62%),
+  radial-gradient(45rem 30rem at 0% 55%,rgba(193,231,255,.20),transparent 65%),
+  #F8F7FF}
+.app{gap:22px}
+.top{min-height:62px;padding:0 2px}
+.brand{gap:12px}
+.brand svg{width:42px;height:42px;padding:7px;border-radius:15px;background:#F0EBFF;box-shadow:inset 0 0 0 1px #E7DFFF}
+.brand b{font-size:1.38rem;color:#5031C5}
+.brand i{border:0;background:#F0ECFF;color:#7257CF;font-size:.72rem}
+#logout{min-height:44px}
+.login{
+  max-width:440px;padding:38px 34px;border:1px solid rgba(108,77,218,.12);
+  border-radius:30px;background:rgba(255,255,255,.88);box-shadow:0 28px 70px -40px rgba(75,53,166,.35);
+  backdrop-filter:blur(14px)
+}
+.login h1{font-size:1.65rem}
+.login::before{content:"";display:block;width:74px;height:74px;margin:0 auto 20px;border-radius:24px;background:linear-gradient(145deg,#7654F0,#B69AFF);box-shadow:0 16px 28px -15px #7654F0}
+.fields{gap:16px}
+.field input,.search{border:1px solid #E7E3F5;background:#FBFAFF;border-radius:15px;min-height:48px}
+.field input:focus,.search:focus{border-color:#8B72ED;box-shadow:0 0 0 4px rgba(104,70,232,.10)}
+.btn{min-height:46px;border-radius:14px;background:linear-gradient(135deg,#7655ED,#5634C9);box-shadow:0 12px 24px -15px #5B3BD2}
+.btn.ghost{background:#F4F1FF;color:#5B43B8;border:1px solid #E9E3FF;box-shadow:none}
+#dash{margin-top:0!important;width:100%}
+.dash-layout{display:grid;grid-template-columns:236px minmax(0,1fr);gap:24px;align-items:start}
+.dash-sidebar{
+  position:sticky;top:18px;min-height:calc(100dvh - 120px);padding:18px 14px;
+  border:1px solid rgba(108,77,218,.10);border-radius:26px;background:rgba(255,255,255,.84);
+  box-shadow:0 18px 45px -34px rgba(75,53,166,.28);display:flex;flex-direction:column;gap:9px
+}
+.side-brand{display:flex;align-items:center;gap:10px;padding:6px 8px 22px;border-bottom:1px solid #F0EDFA;margin-bottom:7px}
+.side-brand-mark{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;color:#fff;background:linear-gradient(145deg,#8D70F5,#5534C7)}
+.side-brand strong{display:block;font:800 1rem/1.2 "Bricolage Grotesque",sans-serif;color:#4C32B4;direction:ltr;text-align:right}
+.side-brand small{display:block;color:#8B86A9;font-size:.68rem;direction:ltr;text-align:right}
+.side-label{padding:8px 10px 3px;color:#A19BBF;font-size:.68rem;font-weight:800}
+.side-link{display:flex;align-items:center;gap:12px;min-height:46px;padding:9px 12px;border-radius:14px;color:#77719D;font-weight:700;font-size:.84rem;text-decoration:none;transition:background .2s,color .2s,transform .2s}
+.side-link svg{width:20px;height:20px;flex:none}
+.side-link.active{color:#fff;background:linear-gradient(110deg,#8565F2,#5A38CF);box-shadow:0 10px 20px -14px #5A38CF}
+.side-link:not(.active){background:transparent}
+.side-link:not(.active):hover{background:#F5F2FF;color:#5C43C1;transform:translateX(-2px)}
+.side-note{margin-top:auto;padding:16px 13px;border-radius:18px;background:linear-gradient(145deg,#F2EDFF,#E9E6FF);color:#6954B9}
+.side-note b{display:block;font:800 .9rem/1.6 "Noto Kufi Arabic",sans-serif}
+.side-note span{display:block;font-size:.72rem;line-height:1.7;color:#8A80B7}
+.dash-main{min-width:0;display:flex;flex-direction:column;gap:22px}
+.dash-heading{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:2px 2px 0}
+.dash-heading h1{font-size:clamp(1.35rem,2.2vw,1.8rem);color:#28205F}
+.dash-heading p{margin:4px 0 0;color:#8984A8;font-size:.82rem}
+.admin-chip{display:flex;align-items:center;gap:10px;padding:7px 13px 7px 8px;border:1px solid #EEEAF9;background:#fff;border-radius:999px}
+.admin-avatar{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;color:#fff;background:linear-gradient(145deg,#F0A4C9,#7655E9);font-weight:800}
+.admin-chip b{display:block;font-size:.78rem;color:#4D4778}
+.admin-chip small{display:block;font-size:.68rem;color:#9A95B4}
+.hero{
+  min-height:255px;position:relative;overflow:hidden;isolation:isolate;display:grid;
+  grid-template-columns:minmax(0,1.1fr) minmax(240px,.9fr);align-items:center;gap:12px;
+  padding:30px clamp(22px,4vw,54px);border-radius:30px;color:#fff;
+  background:radial-gradient(40% 100% at 8% 100%,rgba(83,58,205,.92),transparent 75%),
+    radial-gradient(40% 90% at 100% 0%,rgba(255,255,255,.28),transparent 65%),
+    linear-gradient(112deg,#4B2BAF 0%,#7753E2 48%,#C3AEFF 100%);
+  box-shadow:0 25px 48px -28px rgba(87,56,191,.58)
+}
+.hero:before,.hero:after{content:"";position:absolute;z-index:-1;border:1px solid rgba(255,255,255,.18);border-radius:50%;pointer-events:none}
+.hero:before{width:360px;height:360px;inset-inline-start:-100px;top:-210px;box-shadow:0 0 0 28px rgba(255,255,255,.045),0 0 0 58px rgba(255,255,255,.035)}
+.hero:after{width:250px;height:250px;inset-inline-end:25%;bottom:-200px;box-shadow:0 0 0 24px rgba(255,255,255,.07)}
+.hero-copy{position:relative;z-index:1;max-width:590px}
+.hero-kicker{display:inline-flex;align-items:center;gap:7px;padding:6px 11px;border:1px solid rgba(255,255,255,.25);border-radius:999px;background:rgba(255,255,255,.12);font-size:.72rem;color:#F3EDFF}
+.hero-kicker i{width:7px;height:7px;border-radius:50%;background:#FFD88B;box-shadow:0 0 0 4px rgba(255,216,139,.16)}
+.hero h2{margin:15px 0 9px;font:800 clamp(1.45rem,3vw,2.25rem)/1.55 "Noto Kufi Arabic","Vazirmatn",sans-serif;color:#fff}
+.hero p{margin:0;max-width:510px;color:rgba(255,255,255,.83);font-size:.9rem;line-height:1.9}
+.hero-art{justify-self:center;width:min(100%,330px);height:205px;display:grid;place-items:center}
+.hero-art svg{width:100%;height:100%;overflow:visible;filter:drop-shadow(0 18px 22px rgba(31,17,103,.22))}
+.hero-dots{display:flex;gap:7px;margin-top:22px}
+.hero-dots span{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.45)}
+.hero-dots span:first-child{width:23px;border-radius:99px;background:#fff}
+.section-head{display:flex;align-items:end;justify-content:space-between;gap:12px;margin:1px 2px 0}
+.section-head h2{margin:0;font:800 1.18rem/1.6 "Noto Kufi Arabic","Vazirmatn",sans-serif;color:#29215E}
+.section-head p{margin:2px 0 0;color:#918BAE;font-size:.75rem}
+.section-count{padding:5px 10px;border-radius:999px;background:#F0ECFF;color:#7056CF;font-size:.7rem;font-weight:800}
+.module-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}
+.module-card{
+  min-height:155px;position:relative;overflow:hidden;display:flex;align-items:center;gap:15px;
+  padding:18px;border-radius:23px;border:1px solid var(--card-line);background:var(--card-bg);
+  box-shadow:0 14px 30px -24px var(--card-shadow);isolation:isolate
+}
+.module-card:before{content:"";position:absolute;z-index:-1;width:130px;height:130px;border-radius:50%;inset-inline-start:-54px;bottom:-78px;background:var(--orb);opacity:.28}
+.module-icon{width:82px;height:82px;flex:none;display:grid;place-items:center;border-radius:22px;background:rgba(255,255,255,.68);color:var(--module-color);box-shadow:inset 0 0 0 1px rgba(255,255,255,.8),0 12px 22px -18px var(--module-color)}
+.module-icon svg{width:48px;height:48px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.module-copy{min-width:0}
+.module-copy h3{margin:0 0 5px;font:800 .96rem/1.7 "Noto Kufi Arabic","Vazirmatn",sans-serif;color:#282154}
+.module-copy p{margin:0;color:#777193;font-size:.73rem;line-height:1.8}
+.module-arrow{position:absolute;inset-inline-end:14px;bottom:13px;width:25px;height:25px;border-radius:50%;display:grid;place-items:center;background:var(--module-color);color:#fff;font-size:1rem}
+.module-card.purple{--card-bg:linear-gradient(135deg,#F5F0FF,#EAE3FF);--card-line:#E5DAFF;--module-color:#7049D9;--card-shadow:#8B6BE8;--orb:#B6A0FF}
+.module-card.teal{--card-bg:linear-gradient(135deg,#EFFBFB,#DFF5F5);--card-line:#D4EEEE;--module-color:#159F9D;--card-shadow:#38B9B5;--orb:#83DDDA}
+.module-card.pink{--card-bg:linear-gradient(135deg,#FFF3FA,#FCE5F2);--card-line:#F7DDEC;--module-color:#E34F9C;--card-shadow:#E978B4;--orb:#F8A8D2}
+.module-card.amber{--card-bg:linear-gradient(135deg,#FFF8EC,#FFF0D9);--card-line:#F8E8CC;--module-color:#E58A26;--card-shadow:#E5A14D;--orb:#FFD08B}
+.module-card.blue{--card-bg:linear-gradient(135deg,#F0F6FF,#E3EDFF);--card-line:#D9E6FF;--module-color:#4789E9;--card-shadow:#6DA2F2;--orb:#A7C9FF}
+.module-card.violet{--card-bg:linear-gradient(135deg,#F8F2FF,#EEE5FF);--card-line:#E9DDFB;--module-color:#9254C9;--card-shadow:#AE7DD9;--orb:#D1A8F2}
+.content-panel{padding:22px;border:1px solid #ECE8F8;border-radius:25px;background:rgba(255,255,255,.88);box-shadow:0 18px 42px -32px rgba(75,53,166,.25)}
+.content-panel h1{font-size:1.22rem}
+.content-panel .stats{margin:14px 0}
+.content-panel .stat{border:1px solid #EEEAF8;box-shadow:none;border-radius:17px;padding:15px;background:#FCFBFF}
+.content-panel .stat b{font-size:1.65rem}
+.content-panel .an h2{font-size:1rem}
+.content-panel .an details{background:#FCFBFF;border-color:#EEEAF8}
+.content-panel .row{border-color:#EEEAF8;background:#fff}
+.content-panel .search{background:#FCFBFF}
+#usersPanel{scroll-margin-top:18px}
+#an{scroll-margin-top:18px}
+@media(max-width:1050px){
+  .dash-layout{grid-template-columns:190px minmax(0,1fr);gap:16px}
+  .module-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .hero{min-height:230px}
+}
+@media(max-width:760px){
+  .app{padding:12px 12px 24px;gap:14px}
+  .dash-layout{display:block}
+  .dash-sidebar{position:static;min-height:0;margin-bottom:15px;padding:10px;border-radius:19px;display:block}
+  .side-brand{display:none}
+  .side-label,.side-note{display:none}
+  .dash-sidebar nav{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+  .side-link{flex:0 0 auto;min-height:42px;padding:8px 11px;font-size:.75rem}
+  .side-link svg{width:17px;height:17px}
+  .dash-main{gap:15px}
+  .dash-heading{padding:2px 3px}
+  .dash-heading p{font-size:.72rem}
+  .admin-chip{padding:5px 9px 5px 5px}
+  .admin-avatar{width:34px;height:34px}
+  .hero{grid-template-columns:minmax(0,1fr) 125px;min-height:205px;padding:20px 18px;border-radius:23px;gap:4px}
+  .hero-art{width:135px;height:145px}
+  .hero h2{font-size:1.25rem;line-height:1.65;margin:11px 0 5px}
+  .hero p{font-size:.72rem;line-height:1.8}
+  .hero-kicker{font-size:.64rem}
+  .hero-dots{margin-top:14px}
+  .module-grid{gap:10px}
+  .module-card{min-height:128px;padding:13px;gap:10px;border-radius:18px}
+  .module-icon{width:58px;height:58px;border-radius:17px}
+  .module-icon svg{width:35px;height:35px}
+  .module-copy h3{font-size:.82rem}
+  .module-copy p{font-size:.66rem}
+  .module-arrow{width:21px;height:21px;inset-inline-end:9px;bottom:9px}
+  .content-panel{padding:15px;border-radius:20px}
+  .content-panel .stats{gap:7px}
+  .content-panel .stat{padding:11px 8px}
+  .content-panel .stat b{font-size:1.35rem}
+  .content-panel .stat span{font-size:.7rem}
+}
+@media(max-width:420px){
+  .hero{grid-template-columns:minmax(0,1fr) 92px;min-height:190px;padding:17px 14px}
+  .hero-art{width:100px;height:125px}
+  .hero h2{font-size:1.08rem}
+  .hero p{font-size:.67rem}
+  .module-grid{grid-template-columns:1fr}
+  .module-card{min-height:112px}
+  .module-icon{width:62px;height:62px}
+  .admin-chip small{display:none}
+  .dash-heading h1{font-size:1.18rem}
+}
+@media(prefers-reduced-motion:reduce){.side-link{transition:none}}
+
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <div class="brand">
+      <svg viewBox="0 0 40 40" aria-hidden="true"><g fill="none" stroke-width="5" stroke-linecap="round" transform="rotate(-90 20 20)">
+        <circle cx="20" cy="20" r="15" pathLength="100" stroke-dasharray="17 83" stroke="var(--c1)"/>
+        <circle cx="20" cy="20" r="15" pathLength="100" stroke-dasharray="17 83" stroke-dashoffset="-25" stroke="var(--c2)"/>
+        <circle cx="20" cy="20" r="15" pathLength="100" stroke-dasharray="17 83" stroke-dashoffset="-50" stroke="var(--c3)"/>
+        <circle cx="20" cy="20" r="15" pathLength="100" stroke-dasharray="17 83" stroke-dashoffset="-75" stroke="var(--c4)"/></g></svg>
+      <b>MBTI</b><i>Admin</i>
+    </div>
+    <button class="btn ghost" id="logout" type="button" hidden>چوونە دەرەوە</button>
+  </header>
+
+  <main style="flex:1;display:flex;flex-direction:column">
+    <section class="login" id="loginView">
+      <h1>داشبۆردی ئادمین</h1>
+      <form class="fields" id="loginForm" novalidate>
+        <label class="field"><span>ئیمەیڵ</span><input type="email" name="email" autocomplete="email" inputmode="email" required></label>
+        <label class="field"><span>وشەی نهێنی</span><input type="password" name="password" autocomplete="current-password" required></label>
+        <p class="msg" id="loginMsg" role="alert" aria-live="polite"></p>
+        <button class="btn" type="submit">چوونە ژوورەوە</button>
+      </form>
+    </section>
+
+    <section id="dash" hidden>
+      <div class="dash-layout">
+        <aside class="dash-sidebar" aria-label="بەشی داشبۆرد">
+          <div class="side-brand">
+            <span class="side-brand-mark" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="25" height="25" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a4 4 0 0 0-4 4v1a3 3 0 0 0-3 3 3 3 0 0 0 3 3v1a4 4 0 0 0 4 4"/><path d="M12 3a4 4 0 0 1 4 4v1a3 3 0 0 1 3 3 3 3 0 0 1-3 3v1a4 4 0 0 1-4 4"/><path d="M8 8h2m4 0h2M8 15h2m4 0h2M12 3v18"/></svg>
+            </span>
+            <span><strong>MBTI</strong><small>PERSONALITY INSIGHT</small></span>
+          </div>
+          <div class="side-label">سەرەکی</div>
+          <nav>
+            <a class="side-link active" href="#dashTop"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-6v-7h-4v7H4a1 1 0 0 1-1-1z"/></svg>داشبۆرد</a>
+            <a class="side-link" href="#an"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="4"/><path d="M2 21v-2a7 7 0 0 1 14 0v2M17 4a4 4 0 0 1 0 8m2 3a5 5 0 0 1 3 4v2"/></svg>ئامار و شیکاری</a>
+            <a class="side-link" href="#usersPanel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="4"/><path d="M2 21v-2a7 7 0 0 1 14 0v2M17 8h5m-2.5-2.5v5"/></svg>ئەکاونتەکان</a>
+          </nav>
+          <div class="side-note"><b>خۆت بناسە، جیهان بناسە</b><span>بەڕێوەبردنی پلاتفۆرمی MBTI لە شوێنێکی یەکگرتووەوە</span></div>
+        </aside>
+        <div class="dash-main">
+          <div class="dash-heading" id="dashTop">
+            <div><h1>داشبۆردی بەڕێوەبەر</h1><p>بەخێربێیتەوە، ئەمە پوختەی چالاکییەکانی پلاتفۆرمەکەتە.</p></div>
+            <div class="admin-chip"><span class="admin-avatar">A</span><span><b>Admin</b><small>بەڕێوەبەری سیستەم</small></span></div>
+          </div>
+          <section class="hero" aria-label="پێشەکی داشبۆرد">
+            <div class="hero-copy">
+              <span class="hero-kicker"><i></i> MBTI · PERSONALITY INSIGHT</span>
+              <h2>دونیای کەسایەتییەکان باشتر بناسە</h2>
+              <p>لە ڕێگەی MBTI ـەوە، جیاوازییەکانی مرۆڤ بناسە و ئەزموونی خۆبەناسین بەردەوام پەرە پێ بدە.</p>
+              <div class="hero-dots" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+            </div>
+            <div class="hero-art" aria-hidden="true">
+              <svg viewBox="0 0 320 220" fill="none">
+                <defs>
+                  <linearGradient id="brainFill" x1="70" y1="20" x2="245" y2="190" gradientUnits="userSpaceOnUse"><stop stop-color="#FFF" stop-opacity=".98"/><stop offset=".52" stop-color="#D8C8FF"/><stop offset="1" stop-color="#9874F5"/></linearGradient>
+                  <linearGradient id="brainStroke" x1="80" y1="28" x2="240" y2="180" gradientUnits="userSpaceOnUse"><stop stop-color="#FFF"/><stop offset="1" stop-color="#BCA5FF"/></linearGradient>
+                  <filter id="brainGlow" x="30" y="0" width="260" height="220" filterUnits="userSpaceOnUse"><feGaussianBlur stdDeviation="10"/></filter>
+                </defs>
+                <ellipse cx="160" cy="108" rx="125" ry="70" stroke="#FFF" stroke-opacity=".36" stroke-width="1.5" transform="rotate(-19 160 108)"/>
+                <ellipse cx="160" cy="108" rx="105" ry="87" stroke="#FFF" stroke-opacity=".22" stroke-width="1.2" transform="rotate(32 160 108)"/>
+                <circle cx="160" cy="105" r="76" fill="#DCCEFF" fill-opacity=".45" filter="url(#brainGlow)"/>
+                <path d="M158 40c-20-20-54-8-57 18-23 2-34 29-20 47-13 21 0 47 22 49 7 25 37 31 55 12V40Z" fill="url(#brainFill)" fill-opacity=".92" stroke="url(#brainStroke)" stroke-width="3"/>
+                <path d="M162 40c20-20 54-8 57 18 23 2 34 29 20 47 13 21 0 47-22 49-7 25-37 31-55 12V40Z" fill="url(#brainFill)" fill-opacity=".78" stroke="url(#brainStroke)" stroke-width="3"/>
+                <g stroke="#8060D9" stroke-opacity=".72" stroke-width="3" stroke-linecap="round"><path d="M111 70c16-13 31-2 29 13-2 11-14 12-15 23-1 10 10 16 21 9M103 111c14-7 27 2 25 15-1 8-8 12-8 20M132 48c-5 13 2 20 13 22M178 48c5 13-2 20-13 22M209 70c-16-13-31-2-29 13 2 11 14 12 15 23 1 10-10 16-21 9M217 111c-14-7-27 2-25 15 1 8 8 12 8 20M160 39v135"/></g>
+                <circle cx="58" cy="60" r="7" fill="#FFD5A1"/><circle cx="263" cy="151" r="10" fill="#DCCBFF"/><path d="m260 32 5 12 12 5-12 5-5 12-5-12-12-5 12-5 5-12Z" fill="#FFF" fill-opacity=".78"/>
+              </svg>
+            </div>
+          </section>
+          <div class="section-head"><div><h2>بەشەکانی بەڕێوەبردن</h2><p>بەشە سەرەکییەکانی پلاتفۆرم لە یەک شوێندا</p></div><span class="section-count">٦ بەش</span></div>
+          <div class="module-grid" aria-label="بەشەکانی بەڕێوەبردن">
+            <article class="module-card purple"><span class="module-icon"><svg viewBox="0 0 24 24"><path d="M12 3a4 4 0 0 0-4 4v1a3 3 0 0 0-3 3 3 3 0 0 0 3 3v1a4 4 0 0 0 4 4"/><path d="M12 3a4 4 0 0 1 4 4v1a3 3 0 0 1 3 3 3 3 0 0 1-3 3v1a4 4 0 0 1-4 4"/><path d="M8 8h2m4 0h2M8 15h2m4 0h2M12 3v18"/></svg></span><div class="module-copy"><h3>کەسایەتییەکان</h3><p>١٦ جۆری کەسایەتی MBTI</p></div><span class="module-arrow">←</span></article>
+            <article class="module-card teal"><span class="module-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3v18M3 12h18M5.6 5.6l12.8 12.8M18.4 5.6 5.6 18.4"/><path d="m12 7 1.5 3.5L17 12l-3.5 1.5L12 17l-1.5-3.5L7 12l3.5-1.5L12 7Z"/></svg></span><div class="module-copy"><h3>بورجەکان</h3><p>بەشی بورج و تایبەتمەندییەکان</p></div><span class="module-arrow">←</span></article>
+            <article class="module-card pink"><span class="module-icon"><svg viewBox="0 0 24 24"><path d="M8 21h8m-4-4v4M7 4h10v5a5 5 0 0 1-10 0V4Z"/><path d="M7 6H4v2a4 4 0 0 0 4 4m9-6h3v2a4 4 0 0 1-4 4M9 4V2h6v2"/></svg></span><div class="module-copy"><h3>پێشبڕکێ</h3><p>بەڕێوەبردنی پێشبڕکێ و چالاکییەکان</p></div><span class="module-arrow">←</span></article>
+            <article class="module-card amber"><span class="module-icon"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M20 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></span><div class="module-copy"><h3>ئەکاونتەکان</h3><p>بینین و بەڕێوەبردنی بەکارهێنەران</p></div><span class="module-arrow">←</span></article>
+            <article class="module-card blue"><span class="module-icon"><svg viewBox="0 0 24 24"><path d="m14 6 4 4M4 20l4.5-1 10.8-10.8a2.1 2.1 0 0 0-3-3L5.5 16 4 20Z"/><path d="M13 5 5 13m8-8 4 4M4 4h6M4 4v6"/></svg></span><div class="module-copy"><h3>دەستکاری</h3><p>دەستکاری ناوەڕۆک و زانیارییەکان</p></div><span class="module-arrow">←</span></article>
+            <article class="module-card violet"><span class="module-icon"><svg viewBox="0 0 24 24"><path d="M12 2.5 14 4l2.5-.2 1 2.3 2.2 1.2-.4 2.5 1.2 2.2-1.6 2 .2 2.5-2.3 1-1.2 2.2-2.5-.4-2.2 1.2-2-1.6-2.5.2-1-2.3-2.2-1.2.4-2.5-1.2-2.2 1.6-2-.2-2.5 2.3-1 1.2-2.2 2.5.4L12 2.5Z"/><circle cx="12" cy="12" r="3"/></svg></span><div class="module-copy"><h3>بەڕێوەبردن</h3><p>ڕێکخستن و کۆنترۆڵی سیستەم</p></div><span class="module-arrow">←</span></article>
+          </div>
+          <div class="content-panel">
+          <div class="an" id="an" aria-live="polite">
+        <h1>ئامار</h1>
+        <p id="anMsg"></p>
+        <h2>گشتی</h2>
+        <div class="stats" id="anOv"></div>
+        <details open><summary>بانکی پرسیارەکان</summary><div id="anBank"></div></details>
+        <details><summary>ئاماری ١٦ جۆر و دووتاییەکان</summary><div id="anTypes"></div></details>
+        <details><summary>ئاماری وردەفاکتەرەکان (٢٠)</summary><div id="anFacets"></div></details>
+        <details><summary>ئاماری ڕەفتارەکان (٤٠)</summary><div id="anContents"></div></details>
+        <details><summary>Calibration</summary><div id="anCal"></div></details>
+        <div class="ex">
+          <button class="btn ghost" id="exJson" type="button" disabled>دەرکردن (JSON)</button>
+          <button class="btn ghost" id="exCsv" type="button" disabled>دەرکردنی ڕەفتارەکان (CSV)</button>
+        </div>
+        <p>ئەم ئامارانە کۆکراوەن و ناسێنەری بەکارهێنەریان تێدا نییە.</p>
+      </div>
+          </div>
+          <section class="content-panel" id="usersPanel">
+      <div class="section-head"><div><h2>بەکارهێنەران</h2><p>ئامار و لیستی ئەکاونتەکانی پلاتفۆرم</p></div></div>
+      <div class="stats">
+        <div class="stat"><b id="sTotal">0</b><span>کۆی گشتی</span></div>
+        <div class="stat"><b id="sWeek">0</b><span>نوێ لە ٧ ڕۆژدا</span></div>
+        <div class="stat"><b id="sOk">0</b><span>پشتڕاستکراوە</span></div>
+      </div>
+      <input class="search" id="q" type="search" placeholder="گەڕان بە ناو یان ئیمەیڵ" aria-label="گەڕان">
+      <ul class="list" id="list"></ul>
+      <p class="empty" id="empty" hidden>هیچ بەکارهێنەرێک نەدۆزرایەوە.</p>
+      <button class="btn ghost" id="refresh" type="button" style="margin:16px auto 0;display:flex">نوێکردنەوە</button>
+          </section>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script>
+(function(){
+  var mem={};
+  var store={
+    getItem:function(k){try{var v=localStorage.getItem(k);if(v!==null)return v}catch(e){}
+            try{var s=sessionStorage.getItem(k);if(s!==null)return s}catch(e){} return mem[k]||null},
+    setItem:function(k,v){mem[k]=v;try{localStorage.setItem(k,v);return}catch(e){}
+            try{sessionStorage.setItem(k,v)}catch(e){}},
+    removeItem:function(k){delete mem[k];try{localStorage.removeItem(k)}catch(e){}
+            try{sessionStorage.removeItem(k)}catch(e){}}
+  };
+  var db=window.supabase?window.supabase.createClient('https://rmalzfubkyrwubgoiwsq.supabase.co','sb_publishable_wTg5mh7u3nZ-dih6qtMuHQ_YIjB0WAw',{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:false,storageKey:'mbti-admin-auth',storage:store}}):null;
+  var $=function(i){return document.getElementById(i)};
+  var loginView=$('loginView'),dash=$('dash'),logoutBtn=$('logout'),users=[];
+
+  function setView(isDash){
+    loginView.hidden=isDash;dash.hidden=!isDash;logoutBtn.hidden=!isDash;
+  }
+  function render(){
+    var q=$('q').value.trim().toLowerCase(),list=$('list');
+    list.textContent='';
+    var shown=users.filter(function(u){return !q||(u.display_name||'').toLowerCase().indexOf(q)>-1||(u.email||'').toLowerCase().indexOf(q)>-1});
+    shown.forEach(function(u){
+      var li=document.createElement('li');li.className='row';
+      var av=document.createElement('div');av.className='av';av.textContent=((u.display_name||u.email||'?').trim().charAt(0)||'?').toUpperCase();
+      var w=document.createElement('div');w.className='who';
+      var b=document.createElement('b');b.textContent=u.display_name||'بێ ناو';
+      var s=document.createElement('small');s.textContent=u.email||'';
+      w.appendChild(b);w.appendChild(s);
+      var m=document.createElement('div');m.className='meta';
+      var t=document.createElement('span');t.className='tag'+(u.confirmed?'':' no');t.textContent=u.confirmed?'پشتڕاستکراوە':'چاوەڕێ';
+      var d=document.createElement('div');d.textContent=new Date(u.created_at).toLocaleDateString('en-GB');
+      m.appendChild(t);m.appendChild(d);
+      li.appendChild(av);li.appendChild(w);li.appendChild(m);list.appendChild(li);
+    });
+    $('empty').hidden=shown.length>0;
+  }
+  function load(){
+    return db.rpc('admin_list_users').then(function(r){
+      if(r.error)return false;
+      users=r.data||[];
+      var wk=Date.now()-7*864e5;
+      $('sTotal').textContent=users.length;
+      $('sWeek').textContent=users.filter(function(u){return new Date(u.created_at).getTime()>wk}).length;
+      $('sOk').textContent=users.filter(function(u){return u.confirmed}).length;
+      render();setView(true);loadAnalytics();return true;
+    });
+  }
+
+  /* ---------- Stage 8: aggregate statistics (no individual data) ---------- */
+  var BANK=null,AN={ov:null,rs:null,cs:null};
+  function el(tag,txt,cls){var e=document.createElement(tag);if(txt!=null)e.textContent=txt;if(cls)e.className=cls;return e}
+  function clear(n){while(n.firstChild)n.removeChild(n.firstChild);return n}
+  function fmt(n){return n==null?'—':new Intl.NumberFormat('en-US').format(n)}
+  function para(host,txt,cls){host.appendChild(el('p',txt,cls))}
+  function table(host,head,rows){
+    var w=el('div',null,'scroll'),t=el('table'),tr=el('tr');
+    head.forEach(function(h){tr.appendChild(el('th',h))});t.appendChild(tr);
+    rows.forEach(function(r){var x=el('tr');r.forEach(function(c){x.appendChild(el('td',c==null?'—':String(c)))});t.appendChild(x)});
+    w.appendChild(t);host.appendChild(w);
+  }
+  function loadBank(){
+    if(BANK)return Promise.resolve(BANK);
+    return fetch('question-bank.v1.json').then(function(r){if(!r.ok)throw new Error('http');return r.json()}).then(function(b){BANK=b;return b});
+  }
+  function count(arr,k){var o={};arr.forEach(function(x){var v=x[k];o[v]=(o[v]||0)+1});return o}
+  function pairs(o){return Object.keys(o).sort().map(function(k){return k+': '+fmt(o[k])}).join(' · ')}
+  function renderOverview(){
+    var h=clear($('anOv')),o=AN.ov;
+    if(!o){para($('anMsg'),'ئامارە کۆکراوەکان بەردەست نین (دەبێت فەنکشنەکانی ئامار لە داتابەیسدا دابنرێن).','warn');return}
+    $('anMsg').textContent='';
+    [['کۆی تێستەکان',o.sessions_total],['تەواوکراو',o.completed],['نیمچەچوو',o.in_progress],
+     ['وازهێنراو',o.abandoned],['وەڵامەکان',o.responses_total],['ئەنجامەکان',o.results_total],
+     ['ڕەزامەندی توێژینەوە',o.consent_research],['ڕەزامەندی کالیبرە',o.consent_calibration],['بەکارهێنەری تێستکەر',o.users_with_sessions]
+    ].forEach(function(p){var d=el('div',null,'stat');d.appendChild(el('b',fmt(p[1])));d.appendChild(el('span',p[0]));h.appendChild(d)});
+  }
+  function renderBank(){
+    var h=clear($('anBank')),b=BANK;
+    if(!b){para(h,'بانکی پرسیارەکان بار نەبوو.','warn');return}
+    var it=b.items||[],cl={};(b.contents||[]).forEach(function(c){cl[c.duplicate_cluster]=1});
+    var hs=count(it,'text_hash'),dup=Object.keys(hs).filter(function(k){return hs[k]>1}).length;
+    var ul=el('ul');
+    [fmt(it.length)+' شێوازی نووسین بۆ '+fmt((b.contents||[]).length)+' ڕەفتار و '+fmt((b.facets||[]).length)+' فاکتەر (وەشان '+b.bank_version+')',
+     'Review: '+pairs(count(it,'review_status')),'Active: '+pairs(count(it,'active_status')),
+     'Calibration: '+pairs(count(it,'calibration_status')),
+     'Difficulty دانراو: '+fmt(it.filter(function(x){return x.difficulty!=null}).length)+' · Discrimination دانراو: '+fmt(it.filter(function(x){return x.discrimination!=null}).length),
+     'کلاستەری دووبارە: '+fmt(Object.keys(cl).length)+' · دەقی یەکسان (text_hash): '+fmt(dup)
+    ].forEach(function(t){ul.appendChild(el('li',t))});h.appendChild(ul);
+    (b.review_records||[]).forEach(function(r){
+      var d=el('p',r.decision+' · '+r.scope+' · '+r.reviewer_role+' · '+r.date+' — '+r.basis);d.setAttribute('dir','ltr');h.appendChild(d)});
+  }
+  function renderTypes(){
+    var h=clear($('anTypes')),r=AN.rs;
+    if(!r){para(h,'بەردەست نییە.','warn');return}
+    para(h,'ئەنجامی ڕەزامەندیدراو: '+fmt(r.consented_results));
+    if(r.insufficient){para(h,'هێشتا داتای ڕەزامەندیدراو بەس نییە (کەمتر لە '+fmt(r.min_total)+' ئەنجام)، بۆیە دابەشکردنەکان نیشان نادرێن.','warn');return}
+    var t=r.types||{};
+    table(h,['جۆر','ژمارە'],Object.keys(t).sort().map(function(k){return [k,t[k]==null?'<'+r.min_cell:t[k]]}));
+    var L=r.letters||{};para(h,'پیتەکان: '+Object.keys(L).sort().map(function(k){return k+' '+(L[k]==null?'<'+r.min_cell:fmt(L[k]))}).join(' · '));
+    var C=r.confidence||{};para(h,'دڵنیایی: '+Object.keys(C).sort().map(function(k){return k+' '+(C[k]==null?'<'+r.min_cell:fmt(C[k]))}).join(' · '));
+  }
+  function renderFacets(){
+    var h=clear($('anFacets')),r=AN.rs;
+    para(h,(r&&r.results_with_facets>0)?('ئەنجامی خاوەن فاکتەر: '+fmt(r.results_with_facets)):'هێشتا نادیار: ئەنجامەکان وردەفاکتەریان تێدا نییە.');
+  }
+  function renderContents(){
+    var h=clear($('anContents')),c=AN.cs;
+    if(!c){para(h,'بەردەست نییە.','warn');return}
+    var meta={};((BANK&&BANK.contents)||[]).forEach(function(x){meta[x.content_id]=x});
+    para(h,'ئامارێکی وەسفییە، نەک کالیبرەکردن. دەرکەوتنی ئامار پێویستی بە لانیکەم '+fmt(c.min_n)+' وەڵام لە '+fmt(c.min_users)+' کەس هەیە.');
+    if(!c.rows||!c.rows.length){para(h,'هێشتا هیچ داتایەکی کالیبرەکراو (بە ڕەزامەندی) نییە.');return}
+    table(h,['ڕەفتار','ژمارەی وەڵام','کەس','تێکڕای ئاست','٢٠','٥٠','٧٥','١٠٠'],c.rows.map(function(x){
+      var d=x.dist||{};return [x.content_id,fmt(x.n),fmt(x.users),x.mean_level==null?'نەگەیشتووە بە سنوور':x.mean_level,d['20'],d['50'],d['75'],d['100']]}));
+  }
+  function renderCal(){
+    var h=clear($('anCal')),it=(BANK&&BANK.items)||[];
+    var cal=it.filter(function(x){return x.calibration_status&&x.calibration_status!=='uncalibrated'}).length;
+    para(h,'کالیبرەکراو: '+fmt(cal)+' لە '+fmt(it.length)+'. هیچ پارامەتەری IRT، Difficulty یان Discrimination بە فەرمی دانەنراوە.');
+    para(h,'ئاگاداری: پرسیارەکان بە شێوەی Adaptive هەڵدەبژێردرێن، بۆیە وەڵامەکان نموونەی هەڕەمەکی نین و ئامارەکان بە تەنیا بۆ کالیبرەکردن بەس نین.');
+  }
+  function download(name,type,text){
+    var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type:type}));a.download=name;
+    document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},500);
+  }
+  function stamp(){return new Date().toISOString().slice(0,10)}
+  function exportJson(){
+    download('mbti-stats-'+stamp()+'.json','application/json',JSON.stringify({
+      generated:stamp(),bank_version:BANK?BANK.bank_version:null,overview:AN.ov,research_summary:AN.rs,content_stats:AN.cs,
+      note:'Aggregated, descriptive statistics only. No user identifiers. Not calibrated.'},null,2));
+  }
+  function exportCsv(){
+    var rows=(AN.cs&&AN.cs.rows)||[],q=function(v){return '"'+String(v==null?'':v).replace(/"/g,'""')+'"'};
+    var out=['content_id,n,users,mean_level,lvl20,lvl50,lvl75,lvl100'].concat(rows.map(function(x){var d=x.dist||{};
+      return [x.content_id,x.n,x.users,x.mean_level,d['20'],d['50'],d['75'],d['100']].map(q).join(',')}));
+    download('mbti-content-stats-'+stamp()+'.csv','text/csv',out.join('\n'));
+  }
+  function rpcStat(n){return db.rpc(n).then(function(r){return r.error?null:r.data},function(){return null})}
+  function loadAnalytics(){
+    return Promise.all([rpcStat('admin_overview'),rpcStat('admin_research_summary'),rpcStat('admin_content_stats'),loadBank().catch(function(){return null})]).then(function(a){
+      AN.ov=a[0];AN.rs=a[1];AN.cs=a[2];
+      renderOverview();renderBank();renderTypes();renderFacets();renderContents();renderCal();
+      $('exJson').disabled=!(AN.ov||AN.rs||AN.cs);$('exCsv').disabled=!(AN.cs&&AN.cs.rows&&AN.cs.rows.length);
+    });
+  }
+  $('exJson').addEventListener('click',exportJson);$('exCsv').addEventListener('click',exportCsv);
+  $('q').addEventListener('input',render);
+  $('refresh').addEventListener('click',load);
+  logoutBtn.addEventListener('click',function(){db.auth.signOut().then(function(){users=[];AN={ov:null,rs:null,cs:null};['anOv','anBank','anTypes','anFacets','anContents','anCal'].forEach(function(i){clear($(i))});setView(false)})});
+
+  var f=$('loginForm'),msg=$('loginMsg');
+  f.addEventListener('submit',function(e){
+    e.preventDefault();
+    if(!db){msg.textContent='بارکردنی خزمەتگوزاری سەرکەوتوو نەبوو.';return}
+    var email=f.email.value.trim(),pw=f.password.value,btn=f.querySelector('button');
+    if(!email||!pw){msg.textContent='ئیمەیڵ و وشەی نهێنی بنووسە.';return}
+    msg.textContent='';btn.disabled=true;
+    db.auth.signInWithPassword({email:email,password:pw}).then(function(r){
+      if(r.error){btn.disabled=false;msg.textContent='ئیمەیڵ یان وشەی نهێنی هەڵەیە.';return}
+      return load().then(function(ok){
+        btn.disabled=false;
+        if(ok){f.reset();return}
+        db.auth.signOut();msg.textContent='ئەم هەژمارە ئادمین نییە.';
+      });
+    },function(){btn.disabled=false;msg.textContent='پەیوەندی بە ئینتەرنێتەوە نییە.'});
+  });
+
+  if(db)db.auth.getSession().then(function(r){if(r&&r.data&&r.data.session)load()});
+})();
+</script>
+</body>
+</html>
