@@ -5820,7 +5820,7 @@ var k=mine&&mine.avatar;
 var h=$('hAv'),b=$('bAv'),pv=document.querySelector('#pCard .pav');
 if(h)paint(h,k,function(ok){window.__avHas=!!ok;var f=h.firstChild;if(f&&f.nodeType===3)f.nodeValue=ok?'':letter()});
 if(b)paint(b,k,function(ok){b.textContent=ok?'':letter()});
-if(pv)paint(pv,k,function(ok){if(window.__avDbg)return;window.__avDbg=1;alert(ok?'AVATAR OK: '+k:(k?'AVATAR FILE MISSING: '+url(k):'AVATAR IS NULL | needs_gender='+(mine&&mine.needs_gender)+' | mbti='+(mine&&mine.mbti_type)))});
+if(pv)paint(pv,k);
 if(uid)cache[uid]={k:k||null,t:Date.now()};
 var s=$('avRowS');if(s)s.textContent=mine?(mine.locked?'گۆڕینی وێنە بۆ تۆ قفڵ کراوە':mine.can_change?'دەتوانیت وێنەی خۆت لە گەلەری دابنێیت':'لە لیڤڵی ١٠ دەکرێتەوە · ئێستا لیڤڵی '+kd(mine.lvl)):'';
 }
